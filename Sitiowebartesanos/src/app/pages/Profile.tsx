@@ -8,6 +8,7 @@ import { Textarea } from '../components/ui/textarea';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 import { User, Mail, Phone, MapPin, FileText, Palette, Package, Camera, ShoppingBag, Clock, CheckCircle, XCircle, RotateCcw } from 'lucide-react';
+import { generarFacturaPDF } from '../utils/facturas';
 
 interface Order {
   id: string;
@@ -15,7 +16,7 @@ interface Order {
   total: number;
   status: string;
   items: any[];
-  customer: { name: string; email: string };
+  customer: { name: string; email: string; phone?: string };
 }
 
 export function Profile() {
@@ -140,7 +141,7 @@ export function Profile() {
                   </button>
                   <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                 </div>
-                <h3 className="font-semibold text-lg mb-1">{user.name}</h3>
+                <h3 className="font-bold text-2xl mb-1 text-orange-600 tracking-wide">{user.name}</h3>
                 <p className="text-sm text-gray-600 mb-2">{user.email}</p>
                 <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">
                   {user.role === 'artisan' ? 'Artesano' : user.role === 'admin' ? 'Administrador' : 'Cliente'}
@@ -287,6 +288,9 @@ export function Profile() {
                                       <RotateCcw className="h-3.5 w-3.5 mr-1" /> Devolver
                                     </Button>
                                   )}
+                                  <Button size="sm" variant="outline" className="text-orange-600 border-orange-300 hover:bg-orange-50" onClick={() => generarFacturaPDF(order)}>
+                                    <FileText className="h-3.5 w-3.5 mr-1" /> Factura
+                                  </Button>
                                 </div>
                               </div>
                             </CardContent>
