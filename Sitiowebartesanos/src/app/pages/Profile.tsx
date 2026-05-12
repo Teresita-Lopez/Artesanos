@@ -49,7 +49,7 @@ export function Profile() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -57,6 +57,8 @@ export function Profile() {
         const base64 = reader.result as string;
         setPreviewImage(base64);
         updateProfile({ profileImage: base64 });
+        // Guardar foto por separado con el correo como clave
+        localStorage.setItem(`profileImage_${user?.email}`, base64);
         toast.success('Foto de perfil actualizada');
       };
       reader.readAsDataURL(file);

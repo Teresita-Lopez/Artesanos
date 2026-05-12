@@ -34,6 +34,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
  
 // ── Mapea la respuesta de Django al tipo User del frontend ───────────────────
 function mapDjangoUser(data: any): User {
+  const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
   return {
     id:           String(data.id),
     name:         data.nombre,
@@ -43,7 +44,7 @@ function mapDjangoUser(data: any): User {
     address:      '',
     bio:          data.biografia  ?? '',
     specialty:    data.especialidad ?? '',
-    profileImage: '',
+    profileImage: savedUser.profileImage || '',
   };
 }
  
@@ -64,19 +65,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ correo: email, password }),
     });
- 
+
     if (!res.ok) throw new Error('Error de conexión con el servidor');
- 
     const data = await res.json();
- 
-    if (!data.success) {
-      throw new Error(data.mensaje || 'Credenciales incorrectas');
-    }
- 
-    const loggedUser = mapDjangoUser(data);
+    if (!data.success) throw new Error(data.mensaje || 'Credenciales incorrectas');
+
+    // Recuperar foto guardada por correo
+    const savedPhoto = localStorage.getItem(`profileImage_${email}`) || localStorage.getItem('profileImage_undefined') || '';
+    const loggedUser = {
+      ...mapDjangoUser(data),
+      profileImage: savedPhoto,
+    };
     setUser(loggedUser);
-    localStorage.setItem('user',         JSON.stringify(loggedUser));
-    localStorage.setItem('usuario_id',   String(data.id));
+    localStorage.setItem('user', JSON.stringify(loggedUser));
+    localStorage.setItem('usuario_id', String(data.id));
     localStorage.setItem('usuario_nombre', data.nombre);
   };
  
