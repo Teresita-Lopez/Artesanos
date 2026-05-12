@@ -10,6 +10,10 @@ export interface Categoria {
   descripcion: string;
   artesano: number;
 }
+type ColorProducto = {
+  hex: string;
+  nombre: string;
+}
  
 export interface Producto {
   id?: number;
@@ -29,6 +33,9 @@ export interface Producto {
   precio_con_iva?: number;
   precio_final?: number;
   estado_stock?: 'bajo' | 'normal' | 'maximo';
+  colores?: ColorProducto[];        // ← agregado
+  maneja_tallas?: boolean;   // ← agregado
+  tallas?: string[];
 }
  
 export interface Kardex {
@@ -39,6 +46,9 @@ export interface Kardex {
   cantidad: number;
   fecha: string;
   nota: string;
+  cantidad_inicial?: number;  // ← agregar
+  stock_minimo?: number;       // ← agregar
+  stock_maximo?: number; 
 }
  
 // ── Helper ───────────────────────────────────────────────────────────────────
