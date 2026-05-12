@@ -90,18 +90,18 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
  
           {/* Derecha: carrito (solo no-artesano) + usuario */}
           <div className="flex items-center gap-3 flex-shrink-0">
-            {!isArtisan && (
-              <Link to="/carrito" className="relative">
-                <Button variant="ghost" size="icon">
-                  <ShoppingCart className="h-5 w-5" />
-                  {totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {totalItems}
-                    </span>
-                  )}
-                </Button>
-              </Link>
-            )}
+            {!isArtisan && isAuthenticated && (
+  <Link to="/carrito" className="relative">
+    <Button variant="ghost" size="icon">
+      <ShoppingCart className="h-5 w-5" />
+      {totalItems > 0 && (
+        <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          {totalItems}
+        </span>
+      )}
+    </Button>
+  </Link>
+)}
  
             {isAuthenticated ? (
               <div className="relative" ref={menuRef}>
